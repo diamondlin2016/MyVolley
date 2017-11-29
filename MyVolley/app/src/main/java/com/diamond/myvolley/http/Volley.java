@@ -5,6 +5,8 @@ import com.diamond.myvolley.http.interfaces.IHttpListener;
 import com.diamond.myvolley.http.interfaces.IHttpService;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Author:    Diamond_Lin
@@ -19,6 +21,7 @@ import java.io.UnsupportedEncodingException;
  */
 
 public class Volley {
+    static Map<String, String> mGlobalHeader = new HashMap<>();
 
     public static <T, M> IHttpService sendRequest(T requestParams, String url, Class<M> responseClass, IDataListener<M> listener) {
         IHttpService jsonHttpService = new JsonHttpService();
@@ -33,6 +36,10 @@ public class Volley {
             listener.onFail(0, e.getMessage());
         }
         return jsonHttpService;
+    }
+
+    public static void setGlobalHeader(String key, String value) {
+        mGlobalHeader.put(key,value);
     }
 
 }

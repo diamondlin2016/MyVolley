@@ -1,5 +1,7 @@
 package com.diamond.myvolley.http.interfaces;
 
+import java.util.Map;
+
 /**
  * Author:    Diamond_Lin
  * Version    V1.0
@@ -40,11 +42,10 @@ public interface IHttpService {
      */
     void excute();
 
-
-
     void cancel();
 
     boolean isCancel();
 
+    void setRequestHeader(Map<String, String> map);
 
 }

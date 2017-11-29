@@ -3,6 +3,8 @@ package com.diamond.myvolley.http;
 import com.diamond.myvolley.http.interfaces.IHttpListener;
 import com.diamond.myvolley.http.interfaces.IHttpService;
 
+import java.util.HashMap;
+
 /**
  * Author:    Diamond_Lin
  * Version    V1.0
@@ -37,11 +39,14 @@ public class RequestHolder<T> {
      */
     private String mUrl;
 
+    private HashMap<String, String> mRequestHeader;
+
     public RequestHolder(T requestParams, IHttpService httpService, IHttpListener httpListener, String url) {
         mRequestParams = requestParams;
         mHttpService = httpService;
         mHttpListener = httpListener;
         mUrl = url;
+        mRequestHeader.putAll(Volley.mGlobalHeader);
     }
 
     public T getRequestParams() {
@@ -74,5 +79,13 @@ public class RequestHolder<T> {
 
     public void setUrl(String url) {
         mUrl = url;
+    }
+
+    public void addRequestHeader(String key, String valus) {
+        mRequestHeader.put(key, valus);
+    }
+
+    public HashMap<String, String> getRequestHeader() {
+        return mRequestHeader;
     }
 }

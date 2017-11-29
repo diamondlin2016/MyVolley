@@ -1,17 +1,12 @@
 package com.diamond.myvolley.http;
 
-import com.diamond.myvolley.http.interfaces.IHttpListener;
-import com.diamond.myvolley.http.interfaces.IHttpService;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
 
@@ -28,20 +23,7 @@ import java.io.IOException;
  * Why & What is modified:
  */
 
-public class JsonHttpService implements IHttpService {
-
-    private String mUrl;
-    private IHttpListener mHttpListener;
-    private byte[] mData;
-    private HttpClient httpClient = new DefaultHttpClient();
-    /**
-     * 是否取消请求
-     */
-    private boolean mHasCancel = false;
-
-    public JsonHttpService() {
-    }
-
+public class JsonHttpService extends AbstractHttpService {
 
     @Override
     public void excute() {
@@ -53,38 +35,12 @@ public class JsonHttpService implements IHttpService {
             ByteArrayEntity byteArrayEntity = new ByteArrayEntity(mData);
             ((HttpPost) base).setEntity(byteArrayEntity);
         }
+        constrcutHeader(base);
         try {
             httpClient.execute(base, new HttpResponseHandler());
         } catch (IOException e) {
             mHttpListener.onFail(0, e.getMessage());
         }
-    }
-
-
-    @Override
-    public void cancel() {
-        mHasCancel = true;
-    }
-
-    @Override
-    public boolean isCancel() {
-        return mHasCancel;
-    }
-
-
-    @Override
-    public void setUrl(String url) {
-        mUrl = url;
-    }
-
-    @Override
-    public void setHttpListener(IHttpListener listener) {
-        mHttpListener = listener;
-    }
-
-    @Override
-    public void setRequestData(byte[] data) {
-        mData = data;
     }
 
     private class HttpResponseHandler extends BasicResponseHandler {

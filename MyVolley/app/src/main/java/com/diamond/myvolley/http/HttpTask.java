@@ -25,6 +25,7 @@ public class HttpTask<T> implements Runnable {
         mHttpService = holder.getHttpService();
         mHttpService.setHttpListener(holder.getHttpListener());
         mHttpService.setUrl(holder.getUrl());
+        mHttpService.setRequestHeader(holder.getRequestHeader());
         T requestParams = holder.getRequestParams();
         if (requestParams != null) {
             String requestInfo = JSON.toJSONString(requestParams);
