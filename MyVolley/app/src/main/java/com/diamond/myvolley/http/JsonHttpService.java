@@ -2,10 +2,6 @@ package com.diamond.myvolley.http;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 
 import java.io.IOException;
@@ -25,17 +21,12 @@ import java.io.IOException;
 
 public class JsonHttpService extends AbstractHttpService {
 
+    public JsonHttpService(@RequestType String type) {
+        super(type);
+    }
+
     @Override
     public void excute() {
-        HttpRequestBase base;
-        if (mData == null) {
-            base = new HttpGet(mUrl);
-        } else {
-            base = new HttpPost(mUrl);
-            ByteArrayEntity byteArrayEntity = new ByteArrayEntity(mData);
-            ((HttpPost) base).setEntity(byteArrayEntity);
-        }
-        constrcutHeader(base);
         try {
             httpClient.execute(base, new HttpResponseHandler());
         } catch (IOException e) {

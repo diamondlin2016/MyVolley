@@ -23,8 +23,8 @@ import java.util.Map;
 public class Volley {
     static Map<String, String> mGlobalHeader = new HashMap<>();
 
-    public static <T, M> IHttpService sendRequest(T requestParams, String url, Class<M> responseClass, IDataListener<M> listener) {
-        IHttpService jsonHttpService = new JsonHttpService();
+    public static <T, M> IHttpService sendRequest(T requestParams, String url, Class<M> responseClass, IDataListener<M> listener, @AbstractHttpService.RequestType String type) {
+        IHttpService jsonHttpService = new JsonHttpService(type);
 
         IHttpListener jsonDealListener = new JsonDealListener<>(listener, responseClass);
 
@@ -38,8 +38,9 @@ public class Volley {
         return jsonHttpService;
     }
 
+
     public static void setGlobalHeader(String key, String value) {
-        mGlobalHeader.put(key,value);
+        mGlobalHeader.put(key, value);
     }
 
 }

@@ -1,10 +1,15 @@
 package com.diamond.myvolley.http;
 
+import android.support.annotation.StringDef;
+
 import com.diamond.myvolley.http.interfaces.IHttpListener;
 import com.diamond.myvolley.http.interfaces.IHttpService;
 
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.util.Map;
@@ -24,13 +29,31 @@ import java.util.Map;
 public abstract class AbstractHttpService implements IHttpService {
     protected String mUrl;
     protected IHttpListener mHttpListener;
-    protected byte[] mData;
-    protected HttpClient httpClient = new DefaultHttpClient();
+    protected HttpClient httpClient;
+    protected HttpRequestBase base;
     /**
      * 是否取消请求
      */
     protected boolean mHasCancel = false;
-    private Map<String, String> mRequestHeader;
+
+    public static final String GET = "get";
+    public static final String POST = "post";
+
+    @StringDef({GET, POST})
+    public @interface RequestType {
+    }
+
+    public AbstractHttpService(@RequestType String type) {
+        httpClient = new DefaultHttpClient();
+        switch (type) {
+            case GET:
+                base = new HttpGet(mUrl);
+                break;
+            case POST:
+                base = new HttpPost(mUrl);
+        }
+
+    }
 
     @Override
     public void cancel() {
@@ -55,17 +78,21 @@ public abstract class AbstractHttpService implements IHttpService {
 
     @Override
     public void setRequestData(byte[] data) {
-        mData = data;
+        //only POST can add body
+        if (base instanceof HttpPost) {
+            ByteArrayEntity byteArrayEntity = new ByteArrayEntity(data);
+            ((HttpPost) base).setEntity(byteArrayEntity);
+        }
     }
 
     public void setRequestHeader(Map<String, String> map) {
-        mRequestHeader = map;
+        constructHeader(map);
     }
 
-    protected void constrcutHeader(HttpRequestBase request) {
-        for (String key : mRequestHeader.keySet()) {
-            String value = mRequestHeader.get(key);
-            request.addHeader(key, value);
+    private void constructHeader(Map<String, String> map) {
+        for (String key : map.keySet()) {
+            String value = map.get(key);
+            base.addHeader(key, value);
         }
     }
 }
