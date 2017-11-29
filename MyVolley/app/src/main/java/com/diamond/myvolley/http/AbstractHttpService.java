@@ -1,9 +1,8 @@
 package com.diamond.myvolley.http;
 
-import android.support.annotation.StringDef;
-
 import com.diamond.myvolley.http.interfaces.IHttpListener;
 import com.diamond.myvolley.http.interfaces.IHttpService;
+import com.diamond.myvolley.http.interfaces.RequestType;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -12,7 +11,11 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import java.net.URI;
 import java.util.Map;
+
+import static com.diamond.myvolley.http.interfaces.RequestType.GET;
+import static com.diamond.myvolley.http.interfaces.RequestType.POST;
 
 /**
  * Author:    Diamond_Lin
@@ -27,6 +30,7 @@ import java.util.Map;
  */
 
 public abstract class AbstractHttpService implements IHttpService {
+    protected String mRequestType;
     protected String mUrl;
     protected IHttpListener mHttpListener;
     protected HttpClient httpClient;
@@ -36,23 +40,22 @@ public abstract class AbstractHttpService implements IHttpService {
      */
     protected boolean mHasCancel = false;
 
-    public static final String GET = "get";
-    public static final String POST = "post";
 
-    @StringDef({GET, POST})
-    public @interface RequestType {
+    public AbstractHttpService(String url, @RequestType String type) {
+        mUrl = url;
+        mRequestType = type;
+        httpClient = new DefaultHttpClient();
+        initData();
     }
 
-    public AbstractHttpService(@RequestType String type) {
-        httpClient = new DefaultHttpClient();
-        switch (type) {
+    private void initData() {
+        switch (mRequestType) {
             case GET:
                 base = new HttpGet(mUrl);
                 break;
             case POST:
                 base = new HttpPost(mUrl);
         }
-
     }
 
     @Override
@@ -68,7 +71,11 @@ public abstract class AbstractHttpService implements IHttpService {
 
     @Override
     public void setUrl(String url) {
+        if (mUrl.equals(url)) {
+            return;
+        }
         mUrl = url;
+        base.setURI(URI.create(mUrl));
     }
 
     @Override

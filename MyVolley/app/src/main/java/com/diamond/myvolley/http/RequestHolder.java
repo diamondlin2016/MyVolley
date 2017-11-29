@@ -39,7 +39,7 @@ public class RequestHolder<T> {
      */
     private String mUrl;
 
-    private HashMap<String, String> mRequestHeader;
+    private HashMap<String, String> mRequestHeader = new HashMap<>();
 
     public RequestHolder(T requestParams, IHttpService httpService, IHttpListener httpListener, String url) {
         mRequestParams = requestParams;

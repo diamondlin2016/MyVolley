@@ -1,5 +1,7 @@
 package com.diamond.myvolley.http;
 
+import com.diamond.myvolley.http.interfaces.RequestType;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.impl.client.BasicResponseHandler;
@@ -21,8 +23,8 @@ import java.io.IOException;
 
 public class JsonHttpService extends AbstractHttpService {
 
-    public JsonHttpService(@RequestType String type) {
-        super(type);
+    public JsonHttpService(String url, @RequestType String type) {
+        super(url,type);
     }
 
     @Override

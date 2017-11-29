@@ -8,6 +8,8 @@ import android.view.View;
 import com.diamond.myvolley.http.Volley;
 import com.diamond.myvolley.http.interfaces.IDataListener;
 
+import static com.diamond.myvolley.http.interfaces.RequestType.GET;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onFail(int errorCode, String errorMsg) {
                     Log.e("___error", errorMsg + "__errorCode:" + errorCode);
                 }
-            });
+            }, GET);
         }
     }
 }

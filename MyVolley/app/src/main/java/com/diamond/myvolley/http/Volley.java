@@ -3,10 +3,10 @@ package com.diamond.myvolley.http;
 import com.diamond.myvolley.http.interfaces.IDataListener;
 import com.diamond.myvolley.http.interfaces.IHttpListener;
 import com.diamond.myvolley.http.interfaces.IHttpService;
+import com.diamond.myvolley.http.interfaces.RequestType;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Author:    Diamond_Lin
@@ -21,14 +21,15 @@ import java.util.Map;
  */
 
 public class Volley {
-    static Map<String, String> mGlobalHeader = new HashMap<>();
+    static HashMap<String, String> mGlobalHeader = new HashMap<>();
 
-    public static <T, M> IHttpService sendRequest(T requestParams, String url, Class<M> responseClass, IDataListener<M> listener, @AbstractHttpService.RequestType String type) {
-        IHttpService jsonHttpService = new JsonHttpService(type);
+    public static <T, M> IHttpService sendRequest(T requestParams, String url, Class<M> responseClass, IDataListener<M> listener, @RequestType String type) {
+        IHttpService jsonHttpService = new JsonHttpService(url,type);
 
         IHttpListener jsonDealListener = new JsonDealListener<>(listener, responseClass);
 
         RequestHolder<T> requestHolder = new RequestHolder<>(requestParams, jsonHttpService, jsonDealListener, url);
+
         try {
             HttpTask<T> task = new HttpTask<>(requestHolder);
             ThreadPoolManger.getInstance().execute(task);
