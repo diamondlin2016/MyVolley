@@ -50,7 +50,7 @@ public class JsonHttpService implements IHttpService {
             ((HttpPost) base).setEntity(byteArrayEntity);
         }
         try {
-            httpClient.execute(base, new HttpRespnceHandler());
+            httpClient.execute(base, new HttpResponseHandler());
         } catch (IOException e) {
             mHttpListener.onFail(0, e.getMessage());
         }
@@ -72,7 +72,7 @@ public class JsonHttpService implements IHttpService {
         mData = data;
     }
 
-    private class HttpRespnceHandler extends BasicResponseHandler {
+    private class HttpResponseHandler extends BasicResponseHandler {
         @Override
         public String handleResponse(HttpResponse response) throws ClientProtocolException {
             //响应吗
@@ -82,7 +82,6 @@ public class JsonHttpService implements IHttpService {
             } else {
                 mHttpListener.onFail(code, "error");
             }
-
             return null;
         }
     }

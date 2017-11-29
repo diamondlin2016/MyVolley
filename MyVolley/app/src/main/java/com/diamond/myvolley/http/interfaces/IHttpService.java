@@ -16,26 +16,28 @@ public interface IHttpService {
 
     /**
      * 设置 url
+     *
      * @param url url address
-     * */
+     */
     void setUrl(String url);
 
     /**
      * 设置处理接口
+     *
      * @param listener 处理接口
-     * */
+     */
     void setHttpListener(IHttpListener listener);
 
     /**
      * 设置请求参数
+     *
      * @param data 请求参数 byte 数组
-     * */
+     */
     void setRequestData(byte[] data);
 
     /**
-     *
      * 执行请求
-     * */
+     */
     void excute();
 
 

@@ -14,9 +14,8 @@ package com.diamond.myvolley.http.interfaces;
 
 public interface IDataListener<T> {
     /**
-     *
      * @param t 响应参数
-     * */
+     */
     void onSuccess(T t);
 
     void onFail(int errorCode, String errorMsg);

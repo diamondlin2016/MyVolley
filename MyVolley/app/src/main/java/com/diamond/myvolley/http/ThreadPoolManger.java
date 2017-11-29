@@ -32,7 +32,7 @@ public class ThreadPoolManger {
         return mInstance;
     }
 
-    public void execute(HttpTask task){
+    public void execute(HttpTask task) {
         mExecutorService.execute(task);
     }
 

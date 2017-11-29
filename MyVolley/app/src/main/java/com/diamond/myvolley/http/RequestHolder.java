@@ -19,22 +19,22 @@ public class RequestHolder<T> {
 
     /**
      * 请求参数
-     * */
+     */
     private T mRequestParams;
 
     /**
      * 执行下载类
-     * */
+     */
     private IHttpService mHttpService;
 
     /**
      * 回调结果类
-     * */
+     */
     private IHttpListener mHttpListener;
 
     /**
      * 请求 url
-     * */
+     */
     private String mUrl;
 
     public RequestHolder(T requestParams, IHttpService httpService, IHttpListener httpListener, String url) {
