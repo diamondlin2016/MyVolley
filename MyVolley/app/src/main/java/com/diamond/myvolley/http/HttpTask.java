@@ -34,6 +34,8 @@ public class HttpTask<T> implements Runnable {
 
     @Override
     public void run() {
-        mHttpService.excute();
+        if (!mHttpService.isCancel()) {
+            mHttpService.excute();
+        }
     }
 }

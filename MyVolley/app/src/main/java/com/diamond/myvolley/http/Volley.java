@@ -20,7 +20,7 @@ import java.io.UnsupportedEncodingException;
 
 public class Volley {
 
-    public static <T, M> void sendRequest(T requestParams, String url, Class<M> responseClass, IDataListener<M> listener) {
+    public static <T, M> IHttpService sendRequest(T requestParams, String url, Class<M> responseClass, IDataListener<M> listener) {
         IHttpService jsonHttpService = new JsonHttpService();
 
         IHttpListener jsonDealListener = new JsonDealListener<>(listener, responseClass);
@@ -32,6 +32,7 @@ public class Volley {
         } catch (UnsupportedEncodingException e) {
             listener.onFail(0, e.getMessage());
         }
+        return jsonHttpService;
     }
 
 }

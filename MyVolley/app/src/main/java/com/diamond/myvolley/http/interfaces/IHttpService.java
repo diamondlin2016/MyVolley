@@ -41,4 +41,10 @@ public interface IHttpService {
     void excute();
 
 
+
+    void cancel();
+
+    boolean isCancel();
+
+
 }

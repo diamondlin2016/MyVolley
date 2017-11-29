@@ -34,6 +34,10 @@ public class JsonHttpService implements IHttpService {
     private IHttpListener mHttpListener;
     private byte[] mData;
     private HttpClient httpClient = new DefaultHttpClient();
+    /**
+     * 是否取消请求
+     */
+    private boolean mHasCancel = false;
 
     public JsonHttpService() {
     }
@@ -56,10 +60,21 @@ public class JsonHttpService implements IHttpService {
         }
     }
 
+
+    @Override
+    public void cancel() {
+        mHasCancel = true;
+    }
+
+    @Override
+    public boolean isCancel() {
+        return mHasCancel;
+    }
+
+
     @Override
     public void setUrl(String url) {
         mUrl = url;
-
     }
 
     @Override
@@ -75,6 +90,9 @@ public class JsonHttpService implements IHttpService {
     private class HttpResponseHandler extends BasicResponseHandler {
         @Override
         public String handleResponse(HttpResponse response) throws ClientProtocolException {
+            if (mHasCancel) {
+                return null;
+            }
             //响应吗
             int code = response.getStatusLine().getStatusCode();
             if (code == 200) {
