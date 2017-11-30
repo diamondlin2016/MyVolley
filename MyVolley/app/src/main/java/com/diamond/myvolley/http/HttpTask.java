@@ -24,6 +24,7 @@ public class HttpTask<T> implements Runnable {
     public HttpTask(RequestHolder<T> holder) throws UnsupportedEncodingException {
         mHttpService = holder.getHttpService();
         mHttpService.setHttpListener(holder.getHttpListener());
+        mHttpService.setRequestType(holder.getRequestType());
         mHttpService.setUrl(holder.getUrl());
         mHttpService.setRequestHeader(holder.getRequestHeader());
         T requestParams = holder.getRequestParams();

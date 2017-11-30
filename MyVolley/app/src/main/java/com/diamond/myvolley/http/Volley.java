@@ -23,12 +23,12 @@ import java.util.HashMap;
 public class Volley {
     static HashMap<String, String> mGlobalHeader = new HashMap<>();
 
-    public static <T, M> IHttpService sendRequest(T requestParams, String url, Class<M> responseClass, IDataListener<M> listener, @RequestType String type) {
-        IHttpService jsonHttpService = new JsonHttpService(url,type);
+    public static <T, M> IHttpService sendRequest(T requestParams, String url, Class<M> responseClass, @RequestType String type,IDataListener<M> listener) {
+        IHttpService jsonHttpService = new JsonHttpService();
 
         IHttpListener jsonDealListener = new JsonDealListener<>(listener, responseClass);
 
-        RequestHolder<T> requestHolder = new RequestHolder<>(requestParams, jsonHttpService, jsonDealListener, url);
+        RequestHolder<T> requestHolder = new RequestHolder<>(requestParams, jsonHttpService, jsonDealListener, url,type);
 
         try {
             HttpTask<T> task = new HttpTask<>(requestHolder);

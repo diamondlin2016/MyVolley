@@ -48,4 +48,6 @@ public interface IHttpService {
 
     void setRequestHeader(Map<String, String> map);
 
+    void setRequestType(String type);
+
 }

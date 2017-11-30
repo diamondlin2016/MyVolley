@@ -2,6 +2,7 @@ package com.diamond.myvolley.http;
 
 import com.diamond.myvolley.http.interfaces.IHttpListener;
 import com.diamond.myvolley.http.interfaces.IHttpService;
+import com.diamond.myvolley.http.interfaces.RequestType;
 
 import java.util.HashMap;
 
@@ -19,6 +20,8 @@ import java.util.HashMap;
 
 public class RequestHolder<T> {
 
+
+    private String mRequestType;
     /**
      * 请求参数
      */
@@ -41,12 +44,13 @@ public class RequestHolder<T> {
 
     private HashMap<String, String> mRequestHeader = new HashMap<>();
 
-    public RequestHolder(T requestParams, IHttpService httpService, IHttpListener httpListener, String url) {
+    public RequestHolder(T requestParams, IHttpService httpService, IHttpListener httpListener, String url, @RequestType String type) {
         mRequestParams = requestParams;
         mHttpService = httpService;
         mHttpListener = httpListener;
         mUrl = url;
         mRequestHeader.putAll(Volley.mGlobalHeader);
+        mRequestType = type;
     }
 
     public T getRequestParams() {
@@ -88,4 +92,17 @@ public class RequestHolder<T> {
     public HashMap<String, String> getRequestHeader() {
         return mRequestHeader;
     }
+
+    public void setRequestHeader(HashMap<String, String> requestHeader) {
+        mRequestHeader = requestHeader;
+    }
+
+    public String getRequestType() {
+        return mRequestType;
+    }
+
+    public void setRequestType(String requestType) {
+        mRequestType = requestType;
+    }
+
 }

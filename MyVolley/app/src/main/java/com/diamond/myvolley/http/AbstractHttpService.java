@@ -1,8 +1,9 @@
 package com.diamond.myvolley.http;
 
+import android.support.annotation.NonNull;
+
 import com.diamond.myvolley.http.interfaces.IHttpListener;
 import com.diamond.myvolley.http.interfaces.IHttpService;
-import com.diamond.myvolley.http.interfaces.RequestType;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -41,14 +42,11 @@ public abstract class AbstractHttpService implements IHttpService {
     protected boolean mHasCancel = false;
 
 
-    public AbstractHttpService(String url, @RequestType String type) {
-        mUrl = url;
-        mRequestType = type;
+    public AbstractHttpService() {
         httpClient = new DefaultHttpClient();
-        initData();
     }
 
-    private void initData() {
+    private void initBase() {
         switch (mRequestType) {
             case GET:
                 base = new HttpGet(mUrl);
@@ -70,12 +68,21 @@ public abstract class AbstractHttpService implements IHttpService {
 
 
     @Override
-    public void setUrl(String url) {
-        if (mUrl.equals(url)) {
+    public void setUrl(@NonNull String url) {
+        if (url.equals(mUrl)) {
             return;
         }
         mUrl = url;
-        base.setURI(URI.create(mUrl));
+        if (base == null) {
+            initBase();
+        } else {
+            base.setURI(URI.create(mUrl));
+        }
+    }
+
+    @Override
+    public void setRequestType(String requestType) {
+        mRequestType = requestType;
     }
 
     @Override
@@ -86,7 +93,10 @@ public abstract class AbstractHttpService implements IHttpService {
     @Override
     public void setRequestData(byte[] data) {
         //only POST can add body
-        if (base instanceof HttpPost) {
+        if (mRequestType.equals(POST)) {
+            if (base == null) {
+                initBase();
+            }
             ByteArrayEntity byteArrayEntity = new ByteArrayEntity(data);
             ((HttpPost) base).setEntity(byteArrayEntity);
         }
