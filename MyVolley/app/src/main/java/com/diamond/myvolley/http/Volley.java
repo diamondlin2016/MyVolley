@@ -5,7 +5,6 @@ import com.diamond.myvolley.http.interfaces.IHttpListener;
 import com.diamond.myvolley.http.interfaces.IHttpService;
 import com.diamond.myvolley.http.interfaces.RequestType;
 
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 /**
@@ -23,19 +22,15 @@ import java.util.HashMap;
 public class Volley {
     static HashMap<String, String> mGlobalHeader = new HashMap<>();
 
-    public static <T, M> IHttpService sendRequest(T requestParams, String url, Class<M> responseClass, @RequestType String type,IDataListener<M> listener) {
+    public static <T, M> IHttpService sendRequest(T requestParams, String url, Class<M> responseClass, @RequestType String type, IDataListener<M> listener) {
         IHttpService jsonHttpService = new JsonHttpService();
 
         IHttpListener jsonDealListener = new JsonDealListener<>(listener, responseClass);
 
-        RequestHolder<T> requestHolder = new RequestHolder<>(requestParams, jsonHttpService, jsonDealListener, url,type);
+        RequestHolder<T> requestHolder = new RequestHolder<>(requestParams, jsonHttpService, jsonDealListener, url, type);
 
-        try {
-            HttpTask<T> task = new HttpTask<>(requestHolder);
-            ThreadPoolManger.getInstance().execute(task);
-        } catch (UnsupportedEncodingException e) {
-            listener.onFail(0, e.getMessage());
-        }
+        HttpTask<T> task = new HttpTask<>(requestHolder);
+        ThreadPoolManger.getInstance().execute(task);
         return jsonHttpService;
     }
 

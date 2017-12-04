@@ -1,5 +1,6 @@
 package com.diamond.myvolley.http;
 
+import com.diamond.myvolley.http.download.DownloadItemInfo;
 import com.diamond.myvolley.http.interfaces.IHttpListener;
 import com.diamond.myvolley.http.interfaces.IHttpService;
 import com.diamond.myvolley.http.interfaces.RequestType;
@@ -51,6 +52,17 @@ public class RequestHolder<T> {
         mUrl = url;
         mRequestHeader.putAll(Volley.mGlobalHeader);
         mRequestType = type;
+    }
+
+    public RequestHolder(IHttpService httpService, IHttpListener httpListener, String url, String type, DownloadItemInfo downloadItemInfo) {
+        mHttpService = httpService;
+        mHttpListener = httpListener;
+        mUrl = url;
+        mRequestHeader.putAll(Volley.mGlobalHeader);
+        mRequestType = type;
+        if (downloadItemInfo != null && downloadItemInfo.getCurrentLength() > 0) {
+            mRequestHeader.put("Range", "bytes=" + downloadItemInfo.getCurrentLength() + "-");
+        }
     }
 
     public T getRequestParams() {

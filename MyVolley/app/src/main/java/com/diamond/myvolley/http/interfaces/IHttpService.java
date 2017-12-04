@@ -50,4 +50,6 @@ public interface IHttpService {
 
     void setRequestType(String type);
 
+    boolean isPause();
+
 }

@@ -5,13 +5,17 @@ import android.support.annotation.NonNull;
 import com.diamond.myvolley.http.interfaces.IHttpListener;
 import com.diamond.myvolley.http.interfaces.IHttpService;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
 
@@ -46,13 +50,12 @@ public abstract class AbstractHttpService implements IHttpService {
         httpClient = new DefaultHttpClient();
     }
 
-    private void initBase() {
-        switch (mRequestType) {
-            case GET:
-                base = new HttpGet(mUrl);
-                break;
-            case POST:
-                base = new HttpPost(mUrl);
+    @Override
+    public void excute() {
+        try {
+            httpClient.execute(base, new HttpResponseHandler());
+        } catch (IOException e) {
+            mHttpListener.onFail(0, e.getMessage());
         }
     }
 
@@ -66,6 +69,10 @@ public abstract class AbstractHttpService implements IHttpService {
         return mHasCancel;
     }
 
+    @Override
+    public boolean isPause() {
+        return false;
+    }
 
     @Override
     public void setUrl(@NonNull String url) {
@@ -106,10 +113,30 @@ public abstract class AbstractHttpService implements IHttpService {
         constructHeader(map);
     }
 
+    protected abstract void handleResponse(HttpResponse response);
+
     private void constructHeader(Map<String, String> map) {
         for (String key : map.keySet()) {
             String value = map.get(key);
             base.addHeader(key, value);
+        }
+    }
+
+    private void initBase() {
+        switch (mRequestType) {
+            case GET:
+                base = new HttpGet(mUrl);
+                break;
+            case POST:
+                base = new HttpPost(mUrl);
+        }
+    }
+
+    private class HttpResponseHandler extends BasicResponseHandler {
+        @Override
+        public String handleResponse(HttpResponse response) throws ClientProtocolException {
+            AbstractHttpService.this.handleResponse(response);
+            return null;
         }
     }
 }
